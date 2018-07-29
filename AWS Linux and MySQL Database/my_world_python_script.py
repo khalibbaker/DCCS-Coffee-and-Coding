@@ -82,6 +82,10 @@ def add_data(table, connection):
     for r in result:
         column_names.append(r['Field'])
 
+    # Since the table is set to auto increment, we can remove the id item
+    # which is located in the 0th index of column_names
+    column_names = column_names[1:]
+
     # Start constucting parts of the INSERT query
     column_INSERT = '('
     for column in column_names:
@@ -93,10 +97,7 @@ def add_data(table, connection):
     # Get values from user and store into dictionary
     column_ENTRIES = {}
     for entry in range(0, len(column_names)):
-        if entry == 0:
-            column_ENTRIES[column_names[entry]] = curr_pkey
-        else:
-            column_ENTRIES[column_names[entry]] = input(str(column_names[entry]) + ': ')
+        column_ENTRIES[column_names[entry]] = input(str(column_names[entry]) + ': ')
     # Convert values to list
     ENTRIES_LIST = list(column_ENTRIES.values())
 
@@ -122,7 +123,7 @@ class RUN_SCRIPT:
         try:
             self.root = input('Master Username: ')
             self.password = input('Master Password: ')
-            self.connection = pymysql.connect(host='127.0.0.1',
+            self.connection = pymysql.connect(host='coffee-universe.cnypbfzilvyd.us-east-1.rds.amazonaws.com',
                                  user=self.root,
                                  password=self.password,
                                  db='my_world',
